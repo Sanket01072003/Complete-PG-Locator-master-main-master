@@ -51,9 +51,16 @@ const AdminPage = () => {
     setModalOpen(true);
   };
 
-  const handleInputChange = (name, value) => {
+  const handleInputChangeForCount = (name, value) => {
     setEditedResidency({ ...editedResidency, [name]: value });
   };
+  
+  const handleInputChange = (name, event) => {
+    const value = event.currentTarget.value;
+    setEditedResidency({ ...editedResidency, [name]: value });
+  };
+  
+  
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -80,6 +87,22 @@ const AdminPage = () => {
     }
   };
 
+
+  const handleToggleBookingState = async (id, currentBookingState) => {
+    try {
+      await updateResidency(id, {
+        BookingState: !currentBookingState,
+      });
+
+      alert("Booking state updated successfully");
+      fetchData();
+    } catch (error) {
+      console.error("Error updating booking state:", error);
+      alert("Error updating booking state");
+    }
+  };
+
+
   const openModal = (residency) => {
     setEditing(true);
     setEditedResidency(residency);
@@ -100,6 +123,7 @@ const AdminPage = () => {
       <h1 style={{ color: "#61dafb", fontSize: "24px", fontWeight: "bold", marginBottom: "16px", color: "white" }}>
         Admin Page
       </h1>
+      <p style={{color:"red"}}>Caution: Do not delete those PGs that are already booked. If you still want to delete them please aware the booked user.</p>
       <table style={{ width: "100%", marginTop: "20px", border: "1px solid #ccc" }}>
   <thead>
     <tr style={{ backgroundColor: "#4caf50", color: "white" }}>
@@ -156,92 +180,94 @@ const AdminPage = () => {
           hideCloseButton
         >
           <form onSubmit={handleFormSubmit}>
-            <TextInput
-              label="Title"
-              placeholder="Enter title"
-              value={editedResidency.title}
-              onChange={(event) => handleInputChange("title", event)}
-              required
-            />
+          <TextInput
+  label="Title"
+  placeholder="Enter title"
+  value={editedResidency.title}
+  onChange={(event) => handleInputChange("title", event)}
+  required
+/>
 
-            <Textarea
-              label="Description"
-              placeholder="Enter description"
-              value={editedResidency.description}
-              onChange={(event) => handleInputChange("description", event)}
-              required
-            />
+<Textarea
+  label="Description"
+  placeholder="Enter description"
+  value={editedResidency.description}
+  onChange={(event) => handleInputChange("description", event)}
+  required
+/>
 
-            <NumberInput
-              label="Price"
-              placeholder="Enter price"
-              value={editedResidency.price}
-              onChange={(event) => handleInputChange("price", event)}
-              required
-            />
+<NumberInput
+  label="Price"
+  placeholder="Enter price"
+  value={editedResidency.price}
+  onChange={(event) => handleInputChange("price", event)}
+  required
+/>
 
-            <TextInput
-              label="Address"
-              placeholder="Enter address"
-              value={editedResidency.address}
-              onChange={(event) => handleInputChange("address", event)}
-              required
-            />
+<TextInput
+  label="Address"
+  placeholder="Enter address"
+  value={editedResidency.address}
+  onChange={(event) => handleInputChange("address", event)}
+  required
+/>
 
-            <TextInput
-              label="Country"
-              placeholder="Enter country"
-              value={editedResidency.country}
-              onChange={(event) => handleInputChange("country", event)}
-              required
-            />
+<TextInput
+  label="Country"
+  placeholder="Enter country"
+  value={editedResidency.country}
+  onChange={(event) => handleInputChange("country", event)}
+  required
+/>
 
-            <TextInput
-              label="City"
-              placeholder="Enter city"
-              value={editedResidency.city}
-              onChange={(event) => handleInputChange("city", event)}
-              required
-            />
+<TextInput
+  label="City"
+  placeholder="Enter city"
+  value={editedResidency.city}
+  onChange={(event) => handleInputChange("city", event)}
+  required
+/>
 
-            <NumberInput
-              label="Bathroom Count"
-              placeholder="Enter bathroom count"
-              value={editedResidency.bathroomCount}
-              onChange={(value) => handleInputChange("bathroomCount", value)}
-              required
-            />
+<NumberInput
+  label="Bathroom Count"
+  placeholder="Enter bathroom count"
+  value={editedResidency.bathroomCount}
+  onChange={(value) => handleInputChangeForCount("bathroomCount", value)}
+  required
+/>
 
-            <NumberInput
-              label="Bedroom Count"
-              placeholder="Enter bedroom count"
-              value={editedResidency.bedroomCount}
-              onChange={(value) => handleInputChange("bedroomCount", value)}
-              required
-            />
+<NumberInput
+  label="Bedroom Count"
+  placeholder="Enter bedroom count"
+  value={editedResidency.bedroomCount}
+  onChange={(value) => handleInputChangeForCount("bedroomCount", value)}
+  required
+/>
 
-            <NumberInput
-              label="Parking Count"
-              placeholder="Enter parking count"
-              value={editedResidency.parkingCount}
-              onChange={(value) => handleInputChange("parkingCount", value)}
-              required
-            />
-            <TextInput
-              label="Image URL"
-              placeholder="Enter image URL"
-              value={editedResidency.image}
-              onChange={(event) => handleInputChange("image", event)}
-              required
-            />
+<NumberInput
+  label="Parking Count"
+  placeholder="Enter parking count"
+  value={editedResidency.parkingCount}
+  onChange={(value) => handleInputChangeForCount("parkingCount", value)}
+  required
+/>
 
-            <TextInput
-              label="User Email"
-              placeholder="Enter user email"
-              value={editedResidency.userEmail}
-              onChange={(event) => handleInputChange("userEmail", event)}
-              required
-            />
+<TextInput
+  label="Image URL"
+  placeholder="Enter image URL"
+  value={editedResidency.image}
+  onChange={(event) => handleInputChange("image", event)}
+  required
+/>
+
+{/* <TextInput
+  label="User Email"
+  placeholder="Enter user email"
+  value={editedResidency.userEmail}
+  onChange={(event) => handleInputChange("userEmail", event)}
+  required
+/> */}
+
 
             <Button type="submit" color="teal" className="mt-4">
               Update Residency
@@ -249,6 +275,9 @@ const AdminPage = () => {
           </form>
         </Modal>
       )}
+      <br/>
+      <h2 style={{color: "#ffff"}}>Booking Details</h2>
+      <br/>
       <BookedVisitsTable />
     </div>
   );
