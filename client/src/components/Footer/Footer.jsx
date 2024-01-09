@@ -24,7 +24,7 @@ const Footer = () => {
           <div className="flexCenter f-menu">
             <Link to="/properties" >Property</Link>
             <Link to="https://docs.google.com/forms/d/e/1FAIpQLScVDMYyhA7SCnhjv6gE_oTdGGJxp930UYsYqIvSaPwsRbiH4Q/viewform?usp=sf_link">Contact</Link >
-            <Link to="/">Team Members</Link >
+            <Link to="https://glittery-kitten-bb231e.netlify.app/">Team Members</Link >
           </div>
         </div>
       </div>
